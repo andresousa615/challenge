@@ -1,0 +1,40 @@
+# Segredos e configuração local — nunca versionar
+.env
+.env.*
+!.env.example
+
+# Notas de contexto do projeto (só locais)
+brain/
+
+# Claude Code — settings locais (por máquina/pessoa)
+.claude/settings.local.json
+
+# Sistema operativo / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Bases de dados locais / dados gerados em execução
+*.sqlite3
+*.db
+data/
+
+# Logs
+*.log
+
+# Next.js
+.next/
+next-env.d.ts
+*.tsbuildinfo

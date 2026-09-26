@@ -1,0 +1,135 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Design system: see brain/design-system.md. Light theme only (internal daytime tool). */
+
+@theme inline {
+  --font-sans: var(--font-archivo);
+  --font-heading: var(--font-archivo);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* "Sinal": safety yellow. Only for things that need someone's attention. */
+  --color-signal: var(--signal);
+  --color-signal-soft: var(--signal-soft);
+  --color-signal-foreground: var(--signal-foreground);
+
+  /* Order statuses */
+  --color-status-pendente: var(--status-pendente);
+  --color-status-pendente-foreground: var(--status-pendente-foreground);
+  --color-status-em-preparacao: var(--status-em-preparacao);
+  --color-status-em-preparacao-foreground: var(--status-em-preparacao-foreground);
+  --color-status-enviada: var(--status-enviada);
+  --color-status-enviada-foreground: var(--status-enviada-foreground);
+  --color-status-entregue: var(--status-entregue);
+  --color-status-entregue-foreground: var(--status-entregue-foreground);
+  --color-status-cancelada: var(--status-cancelada);
+  --color-status-cancelada-foreground: var(--status-cancelada-foreground);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Base palette */
+  --zinco: #eceff1; /* page background: galvanised zinc */
+  --chapa: #ffffff; /* panels: sheet metal */
+  --aco: #1d2a33; /* ink: blued steel */
+  --petroleo: #0e5a61; /* brand, primary actions */
+  --sinal: #f2b705; /* attention only */
+  --traco: #d5dbe0; /* borders, rules */
+
+  --background: var(--zinco);
+  --foreground: var(--aco);
+  --card: var(--chapa);
+  --card-foreground: var(--aco);
+  --popover: var(--chapa);
+  --popover-foreground: var(--aco);
+  --primary: var(--petroleo);
+  --primary-foreground: #ffffff;
+  --secondary: #e1e7ea;
+  --secondary-foreground: var(--aco);
+  --muted: #f3f5f6;
+  --muted-foreground: #5b6b76;
+  --accent: #e3eeee;
+  --accent-foreground: var(--petroleo);
+  --destructive: #b42318;
+  --border: var(--traco);
+  --input: #c7cfd5;
+  --ring: var(--petroleo);
+
+  --signal: var(--sinal);
+  --signal-soft: #fff4cc;
+  --signal-foreground: #6b4e00;
+
+  --status-pendente: #e3e8ec;
+  --status-pendente-foreground: #33434f;
+  --status-em-preparacao: #d5ebec;
+  --status-em-preparacao-foreground: #0b4a50;
+  --status-enviada: #dde5f4;
+  --status-enviada-foreground: #1f4486;
+  --status-entregue: #dcefe1;
+  --status-entregue-foreground: #1d6436;
+  --status-cancelada: #f1e2e0;
+  --status-cancelada-foreground: #86352c;
+
+  /* Charts: petrol first, then steel tones */
+  --chart-1: var(--petroleo);
+  --chart-2: #4f8f95;
+  --chart-3: #8fb9bd;
+  --chart-4: #5b6b76;
+  --chart-5: #a9b5bd;
+
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-variant-numeric: tabular-nums;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Headings: condensed and bold, like signage and bin labels */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    font-stretch: 80%;
+    letter-spacing: -0.01em;
+  }
+}
