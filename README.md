@@ -5,21 +5,23 @@ Ferrapex, extrai de cada email o cliente, as linhas (referência + quantidade) e
 pretendida, guarda tudo em PostgreSQL e permite consultar, filtrar, exportar, rever e editar
 as encomendas.
 
-## a) Escolha de tecnologia
+## a) Tecnologia escolhida e porquê
 
-- **Next.js (TypeScript) + shadcn/ui**, páginas renderizadas no servidor e server actions para
-  as alterações. SQL escrito à mão com a biblioteca `postgres` (sem ORM).
-- **PostgreSQL 16 + Docker Compose**: a app e a base de dados arrancam com um único comando.
-- **Extração com regex** (módulo isolado e testado em `src/lib/extraction/regex.ts`). Existe um
-  extrator com LLM (API compatível com OpenAI, ex.: Gemini Flash), **desligado por omissão**.
-- Sincronização automática a cada 5 minutos no servidor, e um botão "Sincronizar".
+**Next.js (TypeScript) + PostgreSQL, tudo em Docker Compose.**
 
-Alternativas rejeitadas:
-- **Django + HTMX** (em vez de Next.js): traz autenticação e admin, mas numa ferramenta
-  interna com três ecrãs isso não decide; pesou mais a qualidade da interface para quem a usa
-  todos os dias.
-- **SQLite** (em vez de Postgres + Docker): zero configuração, mas com Docker Compose o
-  Postgres não custa nada a mais e fica pronto para correr em qualquer servidor.
+- **Next.js:** é uma ferramenta que 12 pessoas não técnicas vão usar todos os dias, por isso
+  pesou mais a qualidade da interface do que a linguagem que domino melhor (Python). Um só
+  projeto faz os ecrãs (com shadcn/ui), a sincronização com a API e o acesso à base de dados.
+- **PostgreSQL em Docker Compose:** a app e a base de dados arrancam juntas com
+  `docker compose up`, iguais em qualquer máquina, e ficam prontas para correr num servidor
+  partilhado pela equipa.
+- **SQL escrito à mão, sem ORM:** com 4 tabelas, o SQL que escrevo é o que corre, fácil de ler
+  e de corrigir.
+- **Extração com regex,** num módulo isolado e testado. Há um extrator com LLM pronto, mas
+  desligado até saber se posso enviar os emails dos clientes a um serviço externo.
+
+**Alternativa posta de lado:** Django + HTMX, que perdeu na qualidade da interface (explicado
+no ponto d).
 
 ## b) Como correr (a partir de um computador limpo)
 
@@ -54,7 +56,11 @@ Notas:
 
 ## c) O que a AI escreveu, o que foi corrigido à mão e o que ainda não é de confiança
 
-_(A preencher pelo autor.)_
+A AI escreveu o código todo, fiz correções visuais a nível de apagar paragraphs que apresentavam informação redundante visualmente na app, tornando-a mais densa do que o necessário. Validei a base de dados, tabelas, ligações etc... manualmente, para garantir que a informação estava guardada e relacionada corretamente.
+
+Não confio na forma como se está a extrair a informação dos emails, pois por enquanto estes vêm com um formato padronizado e limpo. Contudo, diferentes empresas podem enviar de diferentes formas (p.ex: números de quantidades por extenso, ou dar 3 códigos seguidos, e depois colocar as quantidades para cada um respetivamente), por enquanto o código não está pronto para isso, mas tenho uma ideia de como se poderia abordar o problema.
+
+
 
 ## d) Uma decisão em que não segui a AI
 
@@ -66,3 +72,11 @@ _(A preencher pelo autor. Candidatas, com o detalhe em `brain/tech-stack.md`:)_
 - **D1.1** — a AI recomendou bloquear para revisão humana quando regex e LLM discordam;
   decidi que o LLM decide, para não travar o fluxo.
 - **D4.3** — o modelo de dados foi simplificado para quatro tabelas.
+
+
+Alternativas rejeitadas:
+- **Django + HTMX** (em vez de Next.js): traz autenticação e admin, mas numa ferramenta
+  interna com três ecrãs isso não decide; pesou mais a qualidade da interface para quem a usa
+  todos os dias.
+- **SQLite** (em vez de Postgres + Docker): zero configuração, mas com Docker Compose o
+  Postgres não custa nada a mais e fica pronto para correr em qualquer servidor.

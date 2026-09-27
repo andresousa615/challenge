@@ -1,0 +1,80 @@
+# Runs on GitHub's servers on every push to main and on every pull request.
+# Two jobs, in parallel, each on a fresh Ubuntu machine that has Node.js and Docker installed.
+# No secrets are needed: the tests use fixtures and the app starts without an API key.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # 1. The code itself: types, lint and the unit tests. Fast, and says exactly what broke.
+  code:
+    name: Código e testes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descarregar o código
+        uses: actions/checkout@v7
+
+      - name: Instalar Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências (versões exatas do package-lock.json)
+        run: npm ci
+
+      - name: Gerar os tipos das páginas do Next.js
+        run: npx next typegen
+
+      - name: Verificar tipos (TypeScript)
+        run: npx tsc --noEmit
+
+      - name: Verificar regras (ESLint)
+        run: npm run lint
+
+      - name: Testes
+        run: npm test
+
+  # 2. The README's "clean computer" steps, for real: copy .env.example, docker compose up,
+  #    and check that the app answers. Without an API key the sync reports what is missing.
+  docker:
+    name: Arranque com Docker (computador limpo)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descarregar o código
+        uses: actions/checkout@v7
+
+      - name: Criar o .env a partir do exemplo (como no README)
+        run: cp .env.example .env
+
+      - name: docker compose up
+        run: docker compose up --build -d
+
+      - name: Esperar que a app responda
+        run: |
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:3000/encomendas -o page.html 2>/dev/null; then
+              echo "A app respondeu ao fim de $((i * 2)) segundos."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "A app não respondeu em 2 minutos."
+          exit 1
+
+      - name: Confirmar a página e a mensagem de configuração em falta
+        run: |
+          grep -q "Encomendas" page.html
+          grep -q "Falta configurar" page.html
+          echo "Página carregada e sincronização a avisar que falta configurar a API."
+
+      - name: Registo dos containers (se algo falhou)
+        if: failure()
+        run: docker compose logs
+
+      - name: Parar e apagar tudo
+        if: always()
+        run: docker compose down -v
