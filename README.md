@@ -16,7 +16,7 @@ as encomendas.
 - **PostgreSQL em Docker Compose:** a app e a base de dados arrancam juntas com
   `docker compose up`, iguais em qualquer máquina, e ficam prontas para correr num servidor
   partilhado pela equipa.
-- **SQL escrito à mão, sem ORM:** com 4 tabelas, o SQL que escrevo é o que corre, fácil de ler
+- **SQL, sem ORM:** com 4 tabelas, o SQL que escrevo é o que corre, fácil de ler
   e de corrigir.
 - **Extração com regex,** num módulo isolado e testado. Há um extrator com LLM pronto, mas
   desligado até saber se posso enviar os emails dos clientes a um serviço externo.
