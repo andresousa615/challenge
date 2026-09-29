@@ -18,11 +18,8 @@ as encomendas.
   partilhado pela equipa.
 - **SQL, sem ORM:** com 4 tabelas, o SQL que escrevo é o que corre, fácil de ler
   e de corrigir.
-- **Extração com regex,** num módulo isolado e testado. Há um extrator com LLM pronto, mas
+- **Parse dos emails com regex,** num módulo isolado e testado. Há um extrator com LLM pronto, mas
   desligado até saber se posso enviar os emails dos clientes a um serviço externo.
-
-**Alternativa posta de lado:** Django + HTMX, que perdeu na qualidade da interface (explicado
-no ponto d).
 
 ## b) Como correr (a partir de um computador limpo)
 
@@ -71,27 +68,14 @@ Notas:
 
 ## c) O que a AI escreveu, o que corrigi e em que ainda não confio
 
-**O que a AI escreveu:** praticamente todo o código: a sincronização com a API, a extração, a
-base de dados, as páginas da app e os testes. Usei-a para planear e para escrever, sempre por etapas,
-validando cada uma antes de passar à seguinte.
+**O que a AI escreveu:** praticamente todo o código: a sincronização com a API, o parsing dos emails, a base de dados, as páginas da app e os testes. Usei-a para planear e para escrever, sempre por etapas, validando cada uma antes de passar à seguinte.
 
-**O que corrigi:** à mão, apaguei parágrafos que repetiam informação e tornavam as páginas mais
-densas do que o necessário, e validei diretamente na base de dados (com SQL) que as tabelas, as
-ligações e os valores estavam certos. Mas a maior parte das correções foram problemas que fui
-notando ao usar a app e rever o código: coisas mal implementadas ou erros reais, que a AI não
-tinha visto e que mandei corrigir. Alguns exemplos:
-- O valor das encomendas era calculado com o preço atual do catálogo, por isso uma subida de
-  preço alterava encomendas antigas. Agora cada linha guarda o preço, o nome e a unidade do
-  momento em que foi registada.
-- Um produto retirado do catálogo podia deixar encomendas antigas sem informação. Agora os
-  produtos nunca são apagados, só marcados como inativos.
+**O que corrigi:** à mão, apaguei elementos _paragraphs_ que repetiam informação e tornavam as páginas mais densas do que o necessário, e validei diretamente na base de dados (com SQL) que as tabelas, as ligações e os valores estavam certos. Mas a maior parte das correções foram problemas que fui notando ao usar a app e rever o código: ideias mal implementadas ou erros reais, que a AI não tinha visto e que mandei corrigir. Alguns exemplos:
+- O valor das encomendas era calculado com o preço atual do catálogo, por isso uma subida de preço alterava encomendas antigas. Agora cada linha guarda o preço, o nome e a unidade do momento em que foi registada.
+- Um produto retirado do catálogo podia deixar encomendas antigas sem informação. Agora os produtos nunca são apagados, só marcados como inativos.
 
 **Em que ainda não confio:**
-- **A leitura dos emails.** Os 3 emails de exemplo vêm num formato limpo e regular, e a
-  extração por regex foi feita para esse formato. Emails reais podem trazer descrições em vez
-  de códigos, quantidades por extenso, vários códigos seguidos com as quantidades depois, ou
-  respostas que citam o email anterior. Nesses casos a regex falha ou lê valores
-  errados. A abordagem para tratar disto foi não ignorar o email mas deixa-lo para verificação manual, contudo não me parece a abordagem ideal.
+- **A leitura dos emails.** Os 3 emails de exemplo vêm num formato limpo e regular, e a extração por regex foi feita para esse formato. Emails reais podem trazer descrições em vez de códigos, quantidades por extenso, vários códigos seguidos com as quantidades depois, ou respostas que citam o email anterior. Nesses casos a regex falha ou lê valores errados. A abordagem para tratar disto foi não ignorar o email mas deixa-lo para verificação manual, contudo não me parece a abordagem ideal.
 
 - **O LLM como solução ainda não está provado.** A abordagem que poderia ajudar a resolver o problema anterior seria usar de forma complementar um LLM como extrator. Implementei isto em parte. O código à volta do LLM está testado: quando é chamado, como valida a resposta, a nova tentativa e o regresso ao resultado da regex se falhar. Mas esses testes usam respostas escritas por mim, não um modelo real. Nunca o liguei a um fornecedor, porque não sei se posso enviar os emails dos clientes a um serviço externo, por isso não sei se o pedido é aceite nem quão bem o modelo lê encomendas em texto livre. É uma hipótese a validar.
 
