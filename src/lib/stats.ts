@@ -263,8 +263,8 @@ export async function getDueDeliveries(): Promise<DueDelivery[]> {
     FROM orders o
     LEFT JOIN companies c ON c.id = o.company_id
     LEFT JOIN order_lines l ON l.order_id = o.id
-    LEFT JOIN catalog_products cp ON cp.reference = l.reference
-    WHERE o.status IN ('pendente', 'em_preparacao')
+    -- Only a delivered (or cancelled) order is off the hook: a shipped one can still be late.
+    WHERE o.status IN ('pendente', 'em_preparacao', 'enviada')
       AND o.requested_date <= ${today}::date + 7
     GROUP BY o.id, c.name
     ORDER BY o.requested_date, o.id

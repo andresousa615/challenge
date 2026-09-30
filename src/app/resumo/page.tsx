@@ -102,10 +102,10 @@ export default async function ResumoPage({ searchParams }: PageProps<"/resumo">)
       <div className="grid gap-5 lg:grid-cols-2 [&>*]:min-w-0">
         <Card>
           <CardHeader>
-            <CardTitle>Entregas a preparar</CardTitle>
+            <CardTitle>Entregas por concluir</CardTitle>
             <CardDescription>
-              Pendentes ou em preparação, atrasadas ou com entrega nos próximos 7 dias (independente
-              do período).
+              Ainda não entregues (pendentes, em preparação ou enviadas), atrasadas ou com entrega
+              nos próximos 7 dias (independente do período).
             </CardDescription>
           </CardHeader>
           <CardContent>

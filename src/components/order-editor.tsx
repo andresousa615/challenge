@@ -276,13 +276,15 @@ export function OrderEditor(props: Props) {
             <AlertDialogDescription>Tem a certeza que quer guardar estas alterações?</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button variant="ghost" onClick={discard}>
-              Descartar alterações
-            </Button>
-            <Button variant="outline" onClick={() => setConfirming(false)}>
-              Continuar a editar
-            </Button>
-            <Button onClick={save}>Guardar</Button>
+            <div className="flex gap-5">
+              <Button variant="destructive" onClick={discard}>
+                Descartar
+              </Button>
+              <Button variant="outline" onClick={() => setConfirming(false)}>
+                Continuar a editar
+              </Button>
+              <Button onClick={save}>Guardar</Button>
+            </div>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
